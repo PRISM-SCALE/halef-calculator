@@ -1,0 +1,19 @@
+{
+  "name": "halef-calculator",
+  "version": "1.0.0",
+  "description": "Calculator for logistics services provided by halef international",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PRISM-SCALE/halef-calculator.git"
+  },
+  "author": "CHANDAN S S",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PRISM-SCALE/halef-calculator/issues"
+  },
+  "homepage": "https://github.com/PRISM-SCALE/halef-calculator#readme"
+}
