@@ -20,62 +20,32 @@ app.get("/services/:id", (req, res) => {
 });
 
 app.post("/services/:id/calculate", (req, res) => {
-  const { distanceRange, distanceType, accomodationType, vehicle, packingType, isRequireInsurance, goodsValue } =
-    req.body;
-  const serviceId = req.params.id;
-
-  const serviceDetail = serviceDetails.find((sd) => sd.serviceId == serviceId);
-  let isValidRange = false;
-  let isValidVehicle = false;
-  let isVehicleAllowed = false;
-  let isValidPackingType = false;
-  let isValidAccomodationType = false;
-  //check isValidRange
-  isValidRange = serviceDetail?.serviceMetaData?.distance?.values?.some((x) => x?.value?.includes(distanceRange));
-  if (!Boolean(isValidRange))
-    return res.send({ error: "invalid input", errorMessage: `${distanceRange} is not a valid distance range.` });
-
-  //check isValidVehicle
-  let vehicleObj = serviceDetail?.serviceMetaData?.vehicles?.values?.find((x) => x?.name === vehicle);
-  if (!Boolean(vehicleObj))
-    return res.send({ error: "invalid input", errorMessage: `${vehicle} is not a valid Vehicle.` });
-
-  //check isVehicleAllowed
-  isVehicleAllowed = Boolean(vehicleObj?.maxRange >= Number(distanceRange.split("-")[1]));
-  console.log(vehicleObj?.maxRange, Number(distanceRange.split("-")[1]));
-  if (!Boolean(isVehicleAllowed))
-    return res.send({
+  let service = services?.find((s) => s.id === Number(req.params.id));
+  if (!Boolean(service))
+    res.status(400).send({
       error: "invalid input",
-      errorMessage: `${vehicle} is not valid for the given distance Range.`,
+      errorMessage: `Service ID is invalid`,
     });
 
-  //check isValidPackingType
-  isValidPackingType = serviceDetail?.serviceMetaData?.packingType?.values?.includes(packingType);
-  if (!Boolean(isValidPackingType))
-    return res.send({
-      error: "invalid input",
-      errorMessage: `${packingType} is not a valid packing type.`,
-    });
-
-  //check isValidAccomodationType
-  isValidAccomodationType = serviceDetail?.serviceMetaData?.accomodationType?.values?.includes(accomodationType);
-  if (!Boolean(isValidPackingType))
-    return res.send({
-      error: "invalid input",
-      errorMessage: `${accomodationType} is not a valid accomodation type.`,
-    });
-
-  let transportaionCost = 0;
-  let packingCost = 0;
-  let insuranceCost = 0;
-  let totalCost = 0;
-  transportaionCost = getTransportCost(distanceRange, vehicle);
-  packingCost = getPackagingCost(packingType, accomodationType);
-  if (Boolean(isRequireInsurance)) {
-    insuranceCost = 0.02 * goodsValue;
+  switch (service?.code) {
+    case "RELOCATION_PACK_MOVE":
+      GetRelocationQuote(req, res, service?.id);
+      break;
+    case "COURIER_CARGO":
+      GetCourierCargoQuote(req, res, service?.id);
+      break;
+    case "TRUCKING":
+      break;
+    case "WARE_HOUSE":
+      break;
+    case "AIR_AMBULANCE":
+      break;
+    default:
+      return res.status(400).send({
+        error: "invalid input",
+        errorMessage: `invalid service or service not found`,
+      });
   }
-  totalCost = transportaionCost + packingCost + insuranceCost;
-  res.send({ currency: "INR", transportaionCost, packingCost, insuranceCost, totalCost });
 });
 
 app.listen(port, () => {
@@ -847,4 +817,196 @@ const getPackagingCost = (packingType, accomodationType) => {
       break;
   }
   return packingCost;
+};
+
+const GetRelocationQuote = (req, res, serviceId) => {
+  const { distanceRange, distanceType, accomodationType, vehicle, packingType, isRequireInsurance, goodsValue } =
+    req?.body;
+
+  const serviceDetail = serviceDetails.find((sd) => sd.serviceId == serviceId);
+  let isValidRange = false;
+  let isValidVehicle = false;
+  let isVehicleAllowed = false;
+  let isValidPackingType = false;
+  let isValidAccomodationType = false;
+  //check isValidRange
+  isValidRange = serviceDetail?.serviceMetaData?.distance?.values?.some((x) => x?.value?.includes(distanceRange));
+  if (!Boolean(isValidRange))
+    return res.send({ error: "invalid input", errorMessage: `${distanceRange} is not a valid distance range.` });
+
+  //check isValidVehicle
+  let vehicleObj = serviceDetail?.serviceMetaData?.vehicles?.values?.find((x) => x?.name === vehicle);
+  if (!Boolean(vehicleObj))
+    return res.send({ error: "invalid input", errorMessage: `${vehicle} is not a valid Vehicle.` });
+
+  //check isVehicleAllowed
+  isVehicleAllowed = Boolean(vehicleObj?.maxRange >= Number(distanceRange.split("-")[1]));
+  console.log(vehicleObj?.maxRange, Number(distanceRange.split("-")[1]));
+  if (!Boolean(isVehicleAllowed))
+    return res.send({
+      error: "invalid input",
+      errorMessage: `${vehicle} is not valid for the given distance Range.`,
+    });
+
+  //check isValidPackingType
+  isValidPackingType = serviceDetail?.serviceMetaData?.packingType?.values?.includes(packingType);
+  if (!Boolean(isValidPackingType))
+    return res.send({
+      error: "invalid input",
+      errorMessage: `${packingType} is not a valid packing type.`,
+    });
+
+  //check isValidAccomodationType
+  isValidAccomodationType = serviceDetail?.serviceMetaData?.accomodationType?.values?.includes(accomodationType);
+  if (!Boolean(isValidPackingType))
+    return res.send({
+      error: "invalid input",
+      errorMessage: `${accomodationType} is not a valid accomodation type.`,
+    });
+
+  let responseObj = calculateRelocationPrice(
+    distanceRange,
+    vehicle,
+    packingType,
+    accomodationType,
+    isRequireInsurance,
+    goodsValue
+  );
+  res.send(responseObj);
+};
+
+const calculateRelocationPrice = (
+  distanceRange,
+  vehicle,
+  packingType,
+  accomodationType,
+  isRequireInsurance,
+  goodsValue,
+  res
+) => {
+  let transportaionCost = 0;
+  let packingCost = 0;
+  let insuranceCost = 0;
+  let totalCost = 0;
+  transportaionCost = getTransportCost(distanceRange, vehicle);
+  packingCost = getPackagingCost(packingType, accomodationType);
+  if (Boolean(isRequireInsurance)) {
+    insuranceCost = 0.02 * goodsValue;
+  }
+  totalCost = transportaionCost + packingCost + insuranceCost;
+  return { currency: "INR", transportaionCost, packingCost, insuranceCost, totalCost };
+};
+
+const GetCourierCargoQuote = (req, res, serviceId) => {
+  const { locationType, originPincode, destinationPincode, docType, weight, length, width, height, transportType } =
+    req?.body;
+  const serviceDetail = serviceDetails.find((sd) => sd.serviceId == serviceId);
+  if (!Boolean(serviceDetail))
+    return res.status(400).send({
+      error: "invalid input",
+      errorMessage: `Service ID is invalid`,
+    });
+
+  //#region INPUT VALIDATION
+  let isValidLocationType = false;
+  let isValidDocType = false;
+  let isValidTransportType = false;
+
+  isValidLocationType = serviceDetail?.serviceMetaData?.locationTypes?.values?.includes(locationType.toUpperCase());
+  if (!Boolean(isValidLocationType))
+    return res.status(400).send({
+      error: "invalid input",
+      errorMessage: `${locationType} is not a valid Location Type`,
+    });
+
+  isValidDocType = serviceDetail?.serviceMetaData?.docTypes?.values?.includes(docType.toUpperCase());
+  if (!Boolean(isValidDocType))
+    return res.status(400).send({
+      error: "invalid input",
+      errorMessage: `${docType} is not a valid document Type`,
+    });
+
+  isValidTransportType = serviceDetail?.serviceMetaData?.transportTypes?.values?.includes(transportType.toUpperCase());
+  if (!Boolean(isValidTransportType))
+    return res.status(400).send({
+      error: "invalid input",
+      errorMessage: `${transportType} is not a valid transportation Type`,
+    });
+
+  //check for numeric props
+  if (!Boolean(weight) || isNaN(weight))
+    return res.status(400).send({
+      error: "invalid input",
+      errorMessage: `weight must be a number`,
+    });
+
+  if (!Boolean(length) || isNaN(length))
+    return res.status(400).send({
+      error: "invalid input",
+      errorMessage: `length must be a number`,
+    });
+
+  if (!Boolean(width) || isNaN(width))
+    return res.status(400).send({
+      error: "invalid input",
+      errorMessage: `width must be a number`,
+    });
+
+  if (!Boolean(height) || isNaN(height))
+    return res.status(400).send({
+      error: "invalid input",
+      errorMessage: `height must be a number`,
+    });
+  //#endregion INPUT VALIDATION
+
+  //#region CALCULATE QUOTE
+  let courierCargoCost = 0;
+  let volumetricWeight = 0;
+  let volume = length * width * height;
+
+  switch (transportType.toUpperCase()) {
+    case "GROUND-EXPRESS":
+      volumetricWeight = docType.toUpperCase() === "DOCUMENT" ? volume / 4500 : volume / 4500;
+      if (weight > 0 && weight <= 10) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 100 : 150;
+      else if (weight > 10 && weight <= 50) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 80 : 100;
+      else if (weight > 50) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 65 : 80;
+      else
+        return res.status(400).send({
+          error: "invalid input",
+          errorMessage: `weight must be a number and positive`,
+        });
+      break;
+    case "AIR-CARGO":
+      volumetricWeight = docType.toUpperCase() === "DOCUMENT" ? volume / 4750 : volume / 4750;
+      if (weight > 0 && weight <= 10) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 200 : 280;
+      else if (weight > 10 && weight <= 50) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 150 : 220;
+      else if (weight > 50) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 120 : 200;
+      else
+        return res.status(400).send({
+          error: "invalid input",
+          errorMessage: `weight must be a number and positive`,
+        });
+      break;
+    case "PRIORITY-EXPRESS":
+      volumetricWeight = docType.toUpperCase() === "DOCUMENT" ? volume / 4750 : volume / 4750;
+      if (weight > 0 && weight <= 10) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 220 : 300;
+      else if (weight > 10 && weight <= 50) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 180 : 250;
+      else if (weight > 50) courierCargoCost = docType.toUpperCase() === "DOCUMENT" ? 150 : 220;
+      else
+        return res.status(400).send({
+          error: "invalid input",
+          errorMessage: `weight must be a number and positive`,
+        });
+      break;
+    default:
+      return res.status(400).send({
+        error: "invalid input",
+        errorMessage: `${transportType} is not a valid transportation type`,
+      });
+  }
+
+  return res
+    .status(200)
+    .send({ currency: "INR", courierCargoCost, volumetricWeightUnit: "KiloGram", volumetricWeight });
+  //#endregion CALCULATE QUOTE
 };

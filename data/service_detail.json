@@ -88,5 +88,22 @@
         "values": ["Opt In", "Opt Out"]
       }
     }
+  },
+  {
+    "serviceId": 2,
+    "serviceMetaData": {
+      "locationTypes": {
+        "inputType": "dropdown",
+        "values": ["DOMESTIC", "INTERNATIONAL"]
+      },
+      "docTypes": {
+        "inputType": "dropdown",
+        "values": ["DOCUMENT", "NON-DOCUMENT"]
+      },
+      "transportTypes": {
+        "inputType": "dropdown",
+        "values": ["GROUND-EXPRESS", "AIR-CARGO", "PRIORITY-EXPRESS"]
+      }
+    }
   }
 ]
