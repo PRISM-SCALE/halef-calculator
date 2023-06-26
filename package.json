@@ -1,28 +1,29 @@
 {
-  "name": "halef-calculator",
-  "version": "1.0.0",
-  "type": "module",
-  "description": "Calculator for logistics services provided by halef international",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PRISM-SCALE/halef-calculator.git"
-  },
-  "author": "CHANDAN S S",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/PRISM-SCALE/halef-calculator/issues"
-  },
-  "homepage": "https://github.com/PRISM-SCALE/halef-calculator#readme",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "mongoose": "^7.3.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.22"
-  }
+	"name": "halef-calculator",
+	"version": "1.0.0",
+	"type": "module",
+	"description": "Calculator for logistics services provided by halef international",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PRISM-SCALE/halef-calculator.git",
+		"start": "nodemon server.js"
+	},
+	"author": "CHANDAN S S",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/PRISM-SCALE/halef-calculator/issues"
+	},
+	"homepage": "https://github.com/PRISM-SCALE/halef-calculator#readme",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.18.2",
+		"mongoose": "^7.3.1"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.22"
+	}
 }
