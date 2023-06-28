@@ -1,109 +1,109 @@
 [
-  {
-    "serviceId": 1,
-    "serviceMetaData": {
-      "distance": {
-        "inputType": "dropdown",
-        "values": [
-          {
-            "key": "Within city",
-            "value": ["0-10", "11-20", "21-30", "31-40", "41-50"]
-          },
-          {
-            "key": "Inter-city",
-            "value": ["51-100", "101-200", "201-300", "301-400", "401-500", "501-750", "751-1000"]
-          },
-          {
-            "key": "Inter-state",
-            "value": [
-              "301-400",
-              "401-500",
-              "501-750",
-              "751-1000",
-              "1001-1250",
-              "1251-1500",
-              "1501-1750",
-              "1751-2000",
-              "2201-2500",
-              "2501-3000"
-            ]
-          }
-        ]
-      },
-      "accomodationType": {
-        "inputType": "dropdown",
-        "values": ["1RK", "1BHK", "2BHK", "3BHK", "4BHK", "5BHK"]
-      },
-      "vehicles": {
-        "inputType": "dropdown",
-        "values": [
-          {
-            "name": "TATA ACE",
-            "maxRange": 1000
-          },
-          {
-            "name": "BOLERO PICKUP",
-            "maxRange": 5000
-          },
-          {
-            "name": "TATA 407",
-            "maxRange": 5000
-          },
-          {
-            "name": "EICHER 14FT",
-            "maxRange": 5000
-          },
-          {
-            "name": "EICHER 17FT",
-            "maxRange": 5000
-          },
-          {
-            "name": "EICHER 18FT",
-            "maxRange": 5000
-          },
-          {
-            "name": "EICHER 19FT",
-            "maxRange": 5000
-          },
-          {
-            "name": "TATA 22FT",
-            "maxRange": 5000
-          },
-          {
-            "name": "CONTAINER 32FT SXL",
-            "maxRange": 5000
-          },
-          {
-            "name": "EICHER 40FT SXXL",
-            "maxRange": 5000
-          }
-        ]
-      },
-      "packingType": {
-        "inputType": "dropdown",
-        "values": ["Not Required", "Semi Packing", "Full Packing", "Fragile Packing"]
-      },
-      "insurance": {
-        "inputType": "dropdown",
-        "values": ["Opt In", "Opt Out"]
-      }
-    }
-  },
-  {
-    "serviceId": 2,
-    "serviceMetaData": {
-      "locationTypes": {
-        "inputType": "dropdown",
-        "values": ["DOMESTIC", "INTERNATIONAL"]
-      },
-      "docTypes": {
-        "inputType": "dropdown",
-        "values": ["DOCUMENT", "NON-DOCUMENT"]
-      },
-      "transportTypes": {
-        "inputType": "dropdown",
-        "values": ["GROUND-EXPRESS", "AIR-CARGO", "PRIORITY-EXPRESS"]
-      }
-    }
-  }
+	{
+		"serviceId": 1,
+		"serviceMetaData": {
+			"distance": {
+				"inputType": "dropdown",
+				"values": [
+					{
+						"key": "WITHIN_CITY",
+						"value": ["0-10", "11-20", "21-30", "31-40", "41-50"]
+					},
+					{
+						"key": "INTER_CITY",
+						"value": ["51-100", "101-200", "201-300", "301-400", "401-500", "501-750", "751-1000"]
+					},
+					{
+						"key": "INTER_STATE",
+						"value": [
+							"301-400",
+							"401-500",
+							"501-750",
+							"751-1000",
+							"1001-1250",
+							"1251-1500",
+							"1501-1750",
+							"1751-2000",
+							"2201-2500",
+							"2501-3000"
+						]
+					}
+				]
+			},
+			"accomodationType": {
+				"inputType": "dropdown",
+				"values": ["1RK", "1BHK", "2BHK", "3BHK", "4BHK", "5BHK"]
+			},
+			"vehicles": {
+				"inputType": "dropdown",
+				"values": [
+					{
+						"name": "TATA ACE",
+						"maxRange": 1000
+					},
+					{
+						"name": "BOLERO PICKUP",
+						"maxRange": 5000
+					},
+					{
+						"name": "TATA 407",
+						"maxRange": 5000
+					},
+					{
+						"name": "EICHER 14FT",
+						"maxRange": 5000
+					},
+					{
+						"name": "EICHER 17FT",
+						"maxRange": 5000
+					},
+					{
+						"name": "EICHER 18FT",
+						"maxRange": 5000
+					},
+					{
+						"name": "EICHER 19FT",
+						"maxRange": 5000
+					},
+					{
+						"name": "TATA 22FT",
+						"maxRange": 5000
+					},
+					{
+						"name": "CONTAINER 32FT SXL",
+						"maxRange": 5000
+					},
+					{
+						"name": "EICHER 40FT SXXL",
+						"maxRange": 5000
+					}
+				]
+			},
+			"packingType": {
+				"inputType": "dropdown",
+				"values": ["Not Required", "Semi Packing", "Full Packing", "Fragile Packing"]
+			},
+			"insurance": {
+				"inputType": "dropdown",
+				"values": ["Opt In", "Opt Out"]
+			}
+		}
+	},
+	{
+		"serviceId": 2,
+		"serviceMetaData": {
+			"locationTypes": {
+				"inputType": "dropdown",
+				"values": ["DOMESTIC", "INTERNATIONAL"]
+			},
+			"docTypes": {
+				"inputType": "dropdown",
+				"values": ["DOCUMENT", "NON-DOCUMENT"]
+			},
+			"transportTypes": {
+				"inputType": "dropdown",
+				"values": ["GROUND-EXPRESS", "AIR-CARGO", "PRIORITY-EXPRESS"]
+			}
+		}
+	}
 ]
